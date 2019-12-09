@@ -1,0 +1,53 @@
+select distinct applicatio7_.id as id1_4_,
+                applicatio7_.creation_date as creation_date2_4_,
+                applicatio7_.creator_id as creator_id9_4_,
+                applicatio7_.last_modification_date as last_modification_3_4_,
+                applicatio7_.last_modifier_id as last_modifier_id10_4_,
+                applicatio7_.version as version4_4_,
+                applicatio7_.disable_date as disable_date5_4_,
+                applicatio7_.effective_date as effective_date6_4_,
+                applicatio7_.application_system_id as application_syste11_4_,
+                applicatio7_.code as code7_4_,
+                applicatio7_.name as name8_4_,
+                applicatio7_.parent_id as parent_id12_4_,
+                applicatio7_1_.icon as icon1_16_,
+                applicatio7_1_.priority as priority2_16_,
+                applicatio7_1_.name as name3_16_,
+                applicatio7_1_.url as url4_16_,
+                case
+                  when applicatio7_1_.id is not null then
+                   1
+                  when applicatio7_.id is not null then
+                   0
+                end as clazz_
+  from cor.user_job userjob0_
+ inner join cor.organization_user organizati1_
+    on userjob0_.organization_user_id = organizati1_.id
+ inner join cor.application_user user8_
+    on organizati1_.user_id = user8_.id
+ inner join cor.unit_position unitpositi2_
+    on userjob0_.unit_position_id = unitpositi2_.id
+ inner join cor.position_type positionty3_
+    on unitpositi2_.position_type_id = positionty3_.id
+ inner join cor.position_role applicatio4_
+    on positionty3_.id = applicatio4_.position_type_id
+ inner join cor.application_role applicatio5_
+    on applicatio4_.application_role_id = applicatio5_.id
+ inner join cor.resource_role applicatio6_
+    on applicatio5_.id = applicatio6_.application_role_id
+ inner join cor.application_resource applicatio7_
+    on applicatio6_.application_resource_id = applicatio7_.id
+  left outer join cor.menu applicatio7_1_
+    on applicatio7_.id = applicatio7_1_.id
+ where user8_.id = 65
+   and (current_date between organizati1_.effective_date and
+       nvl(organizati1_.disable_date, current_date))
+   and (current_date between userjob0_.effective_date and
+       nvl(userjob0_.disable_date, current_date))
+   and (current_date between applicatio5_.effective_date and
+       nvl(applicatio5_.disable_date, current_date))
+   and (current_date between unitpositi2_.effective_date and
+       nvl(unitpositi2_.disable_date, current_date))
+   and (current_date between positionty3_.effective_date and
+       nvl(positionty3_.disable_date, current_date))
+   and applicatio5_.application_system_id = 1;
